@@ -1,0 +1,28 @@
+{
+  "name": "manga-viewer",
+  "version": "1.0.0",
+  "description": "View image list with manga viewer",
+  "main": "mview.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mview": "mview.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuanhhaogk/Manga-Viewer.git"
+  },
+  "author": "Vu Anh Hao <vuanhhaogk@gmail.com> (https://vuanhhaogk.github.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuanhhaogk/Manga-Viewer/issues"
+  },
+  "homepage": "https://github.com/vuanhhaogk/Manga-Viewer#readme",
+  "dependencies": {
+    "commander": "^2.10.0",
+    "express": "^4.15.3",
+    "image-type": "^3.0.0",
+    "open": "0.0.5"
+  }
+}
