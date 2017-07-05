@@ -15,8 +15,21 @@ App.load = function(){
     xhttp.send();
 }
 
+App.voteImage = function(){
+    let data = this.getAttribute('data')
+
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open('GET', '/vote?name=' + data, true);
+    xhttp.send();
+}
+
 App.show = function(ls){
     for (var i = 0; i < ls.length; i++){
+        var box = document.createElement('div')
+        box.className = 'box'
+
         var image = new Image();
         image.src = 'images/' + ls[i];
         image.onclick = function(){
@@ -25,7 +38,15 @@ App.show = function(ls){
             else
                 this.style.maxWidth = 'unset';
         }
-        document.body.appendChild(image);
+
+        var star = document.createElement('button')
+        star.className = 'fa fa-star'
+        star.setAttribute('data', ls[i])
+        star.onclick = this.voteImage;
+
+        box.appendChild(image)
+        box.appendChild(star)
+        document.body.appendChild(box);
     }
 }
 

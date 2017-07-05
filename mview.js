@@ -6,6 +6,7 @@ const express = require('express')
 const open = require('open')
 const imageType = require('image-type')
 const app = express()
+const exec = require('child_process').exec
 
 function getList(){
     let ls = fs.readdirSync(root)
@@ -22,16 +23,40 @@ function getList(){
         i++
     }
 
-    ls.sort()
+    switch (true){
+        case program.random:
+            let ols = ls
+            ls = []
+            while (ols.length > 0){
+                let i = Math.floor(Math.random() * ols.length)
+                ls.push(ols[i])
+                ols.splice(i, 1)
+            }
+            break
+        case program.top:
+            let os = ls
+            let data = fs.existsSync(`.info`) ? JSON.parse(fs.readFileSync(`.info`)) : {}
+            ls = []
+            for (let i = 0; i < os.length; i++){
+                let j = ls.length - 1
+                while (j >= 0){
+                    let d1 = data[os[i]] || 0
+                    let d2 = data[ls[j]] || 0
+                    if (d1 > d2){
+                        ls[j + 1] = ls[j]
+                        j--
+                    } else
+                        break
+                }
+                ls[j + 1] = os[i]
+            }
+            break
+        default:
+            ls.sort()
+    }
 
     if (program.random){
-        let ols = ls
-        ls = []
-        while (ols.length > 0){
-            let i = Math.floor(Math.random() * ols.length)
-            ls.push(ols[i])
-            ols.splice(i, 1)
-        }
+
     }
 
     return ls
@@ -40,6 +65,7 @@ function getList(){
 program
     .version('1.0.0')
     .option('-r, --random', 'Random swarp image list')
+    .option('-t, --top', 'Sort image by star')
     .parse(process.argv)
 
 let root = process.cwd()
@@ -54,6 +80,14 @@ app.get('/', (req, res) => {
 
 app.get('/get-list', (req, res) => {
     res.json(getList())
+})
+
+app.get('/vote', (req, res) => {
+    let name = req.query.name
+    let data = fs.existsSync(`.info`) ? JSON.parse(fs.readFileSync(`.info`)) : {}
+    data[name] = data[name] ? data[name] + 1 : 1
+    fs.writeFileSync(`.info`, JSON.stringify(data))
+    res.sendStatus(200)
 })
 
 app.listen(3000, () => {
