@@ -11,8 +11,6 @@ function getList(){
     let ls = fs.readdirSync(root)
     let i = 0
 
-    console.log(ls);
-
     while (i < ls.length){
         let path = `${root}/${ls[i]}`
         let info = imageType(fs.readFileSync(path))
@@ -23,14 +21,25 @@ function getList(){
 
         i++
     }
-    
+
     ls.sort()
+
+    if (program.random){
+        let ols = ls
+        ls = []
+        while (ols.length > 0){
+            let i = Math.floor(Math.random() * ols.length)
+            ls.push(ols[i])
+            ols.splice(i, 1)
+        }
+    }
 
     return ls
 }
 
 program
     .version('1.0.0')
+    .option('-r, --random', 'Random swarp image list')
     .parse(process.argv)
 
 let root = process.cwd()
